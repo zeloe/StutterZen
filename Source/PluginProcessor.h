@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "AudioEngine.h"
 #include "WaveFormViewer.h"
+#include "WaveFormViewer2.h"
 //==============================================================================
 /**
 */
@@ -56,7 +57,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     juce::AudioProcessorValueTreeState treeState;
     WaveFromViewer audioVisualizer;
-    juce::AudioVisualiserComponent audioVisualizer2;
+    WaveFromViewer_2 audioVisualizer2;
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged(const juce::String& parameterID, float newValue) override;

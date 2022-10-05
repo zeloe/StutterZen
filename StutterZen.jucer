@@ -6,6 +6,10 @@
   <MAINGROUP id="H1unA9" name="StutterZen">
     <GROUP id="{F6CDBD2C-13F7-BAD4-45F1-FC4F81126BAB}" name="DSP">
       <GROUP id="{DE0D069A-4E43-ADB5-5530-65B32E25F618}" name="GUI">
+        <FILE id="s1k2Dz" name="WaveFormViewer2.cpp" compile="1" resource="0"
+              file="Source/WaveFormViewer2.cpp"/>
+        <FILE id="gCKE7k" name="WaveFormViewer2.h" compile="0" resource="0"
+              file="Source/WaveFormViewer2.h"/>
         <FILE id="CTDNZv" name="WaveFormViewer.cpp" compile="1" resource="0"
               file="Source/WaveFormViewer.cpp"/>
         <FILE id="XGaiKz" name="WaveFormViewer.h" compile="0" resource="0"

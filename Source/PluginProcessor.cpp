@@ -145,6 +145,8 @@ void StutterZenAudioProcessor::updateParameters()
     audioEngine.updateDelayR(treeState.getRawParameterValue("delayR")->load());
     audioEngine.updateDelayWetR(treeState.getRawParameterValue("delaywetR")->load());
     audioEngine.updateOutputGainR(treeState.getRawParameterValue("gainR")->load());
+    audioVisualizer.updateLineL(treeState.getRawParameterValue("thresholdL")->load());
+    audioVisualizer.updateLineR(treeState.getRawParameterValue("thresholdR")->load());
 }
 
 
@@ -225,6 +227,8 @@ void StutterZenAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 void StutterZenAudioProcessor::releaseResources()
 {
     audioEngine.reset();
+    audioVisualizer.clear();
+    audioVisualizer2.clear();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations

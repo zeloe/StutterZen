@@ -32,6 +32,7 @@ thresholdAttachmentR(audioProcessor.treeState, "thresholdR", thresHoldKnobR),
 delayTimeAttachmentR(audioProcessor.treeState, "delayR", delayKnobR),
 delayWetAttachmentR(audioProcessor.treeState, "delaywetR", delayWetKnobR),
 outGainAttachmentR(audioProcessor.treeState, "gainR", outGainKnobR)
+
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -40,11 +41,11 @@ outGainAttachmentR(audioProcessor.treeState, "gainR", outGainKnobR)
     addAndMakeVisible(audioProcessor.audioVisualizer2);
     audioProcessor.audioVisualizer.setColours(juce::Colours::black, juce::Colours::whitesmoke);
     audioProcessor.audioVisualizer2.setColours(juce::Colours::black, juce::Colours::whitesmoke);
-    reductionKnobL.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    reductionKnobL.setStyles(juce::Zen_Knob::ZenStyles::redknob);
     reductionKnobL.setTextValueSuffix(" ReductionL");
     addAndMakeVisible(&reductionKnobL);
     
-    thresHoldKnobL.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    thresHoldKnobL.setStyles(juce::Zen_Knob::ZenStyles::redknob);
     thresHoldKnobL.setTextValueSuffix(" ThresholdL");
     addAndMakeVisible(&thresHoldKnobL);
 
@@ -53,24 +54,24 @@ outGainAttachmentR(audioProcessor.treeState, "gainR", outGainKnobR)
         audioProcessor.audioVisualizer.updateLineL(thresHoldKnobL.getValue());
     };
     
-    delayKnobL.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    delayKnobL.setStyles(juce::Zen_Knob::ZenStyles::redknob);
     delayKnobL.setTextValueSuffix(" DelayTimeL");
     addAndMakeVisible(&delayKnobL);
     
     
-    delayWetKnobL.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    delayWetKnobL.setStyles(juce::Zen_Knob::ZenStyles::redknob);
     delayWetKnobL.setTextValueSuffix(" DelayWetL");
     addAndMakeVisible(&delayWetKnobL);
     
-    outGainKnobL.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    outGainKnobL.setStyles(juce::Zen_Knob::ZenStyles::redknob);
     outGainKnobL.setTextValueSuffix(" OutGainL");
     addAndMakeVisible(&outGainKnobL);
 
-    reductionKnobR.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    reductionKnobR.setStyles(juce::Zen_Knob::ZenStyles::greenknob);
     reductionKnobR.setTextValueSuffix(" ReductionR");
     addAndMakeVisible(&reductionKnobR);
     
-    thresHoldKnobR.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    thresHoldKnobR.setStyles(juce::Zen_Knob::ZenStyles::greenknob);
     thresHoldKnobR.setTextValueSuffix(" ThresholdR");
     addAndMakeVisible(&thresHoldKnobR);
 
@@ -79,19 +80,18 @@ outGainAttachmentR(audioProcessor.treeState, "gainR", outGainKnobR)
         audioProcessor.audioVisualizer.updateLineR(thresHoldKnobR.getValue());
     };
     
-    delayKnobR.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    delayKnobR.setStyles(juce::Zen_Knob::ZenStyles::greenknob);
     delayKnobR.setTextValueSuffix(" DelayTimeR");
     addAndMakeVisible(&delayKnobR);
     
     
-    delayWetKnobR.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    delayWetKnobR.setStyles(juce::Zen_Knob::ZenStyles::greenknob);
     delayWetKnobR.setTextValueSuffix(" DelayWetR");
     addAndMakeVisible(&delayWetKnobR);
     
-    outGainKnobR.setStyles(juce::Zen_Knob::ZenStyles::blackknob);
+    outGainKnobR.setStyles(juce::Zen_Knob::ZenStyles::greenknob);
     outGainKnobR.setTextValueSuffix(" OutGainR");
     addAndMakeVisible(&outGainKnobR);
-    
     
 }
 
