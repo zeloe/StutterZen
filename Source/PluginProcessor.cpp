@@ -38,6 +38,8 @@ audioVisualizer2(2)
     treeState.addParameterListener("delayR", this);
     treeState.addParameterListener("delaywetR", this);
     treeState.addParameterListener("gainR", this);
+    treeState.addParameterListener("mode", this);
+    
 }
 
 StutterZenAudioProcessor::~StutterZenAudioProcessor()
@@ -52,6 +54,8 @@ StutterZenAudioProcessor::~StutterZenAudioProcessor()
     treeState.removeParameterListener("delayR", this);
     treeState.removeParameterListener("delaywetR", this);
     treeState.removeParameterListener("gainR", this);
+    treeState.removeParameterListener("mode", this);
+   
 }
 juce::AudioProcessorValueTreeState::ParameterLayout
 StutterZenAudioProcessor::createParameterLayout()
@@ -78,7 +82,8 @@ StutterZenAudioProcessor::createParameterLayout()
     auto pOutGainR = (std::make_unique<juce::AudioParameterFloat>("gainR",
                                                           "OutGainR",0,5.f,0.5f));
     
-   
+    auto pMode = (std::make_unique<juce::AudioParameterBool>("mode",
+                                                            "Mode",false));
     
     params.push_back(std::move(pDeltaL));
     params.push_back(std::move(pThresholdL));
@@ -90,6 +95,7 @@ StutterZenAudioProcessor::createParameterLayout()
     params.push_back(std::move(pDelayR));
     params.push_back(std::move(pDelayWetR));
     params.push_back(std::move(pOutGainR));
+    params.push_back(std::move(pMode));
     
     return {params.begin(),params.end()};
 }
@@ -296,17 +302,20 @@ juce::AudioProcessorEditor* StutterZenAudioProcessor::createEditor()
 //==============================================================================
 void StutterZenAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    juce::MemoryOutputStream mos (destData, true);
-                 treeState.state.writeToStream(mos);
+    
+    auto state = treeState.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void StutterZenAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
-                     if(tree.isValid() )
-                     {
-                         treeState.replaceState(tree);
-                     }}
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+     
+            if (xmlState.get() != nullptr)
+                if (xmlState->hasTagName (treeState.state.getType()))
+                    treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
+}
 
 //==============================================================================
 // This creates new instances of the plugin..
