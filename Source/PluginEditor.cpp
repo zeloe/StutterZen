@@ -86,14 +86,17 @@ modeAttachment(audioProcessor.treeState,"mode", modeButton)
     outGainKnobR.setStyles(juce::Zen_Knob::ZenStyles::greenknob);
     outGainKnobR.setTextValueSuffix(" OutGainR");
     addAndMakeVisible(&outGainKnobR);
-    
+
+
     modeButton.setButtonText("Link");
     modeButton.setToggleable(true);
     modeButton.setClickingTogglesState(true);
-    
+   
     modeButton.addListener(this);
     modeButton.setEnabled(true);
     addAndMakeVisible(&modeButton);
+
+   
     //not the best solution but it works :)
     modeButton.triggerClick();
     modeButton.triggerClick();
@@ -138,7 +141,7 @@ void StutterZenAudioProcessorEditor::buttonStateChanged(juce::Button* button)
    
     if (button == &modeButton)
     {
-        if (modeButton.getToggleStateValue() == false)
+        if (modeButton.getToggleState() == false)
         {
             thresHoldKnobL.onValueChange = [this]()
             {
@@ -158,7 +161,7 @@ void StutterZenAudioProcessorEditor::buttonStateChanged(juce::Button* button)
             delayWetKnobR.onValueChange = [this](){};
             outGainKnobL.onValueChange = [this](){};
             outGainKnobR.onValueChange = [this](){};
-        } else if (modeButton.getToggleStateValue() == true )
+        } else if (modeButton.getToggleState() == true)
         {
             thresHoldKnobL.onValueChange = [this]()
             {

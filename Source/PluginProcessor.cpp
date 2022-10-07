@@ -38,7 +38,7 @@ audioVisualizer2(2)
     treeState.addParameterListener("delayR", this);
     treeState.addParameterListener("delaywetR", this);
     treeState.addParameterListener("gainR", this);
-    treeState.addParameterListener("mode", this);
+  //  treeState.addParameterListener("mode", this);
     
 }
 
@@ -54,7 +54,7 @@ StutterZenAudioProcessor::~StutterZenAudioProcessor()
     treeState.removeParameterListener("delayR", this);
     treeState.removeParameterListener("delaywetR", this);
     treeState.removeParameterListener("gainR", this);
-    treeState.removeParameterListener("mode", this);
+  //  treeState.removeParameterListener("mode", this);
    
 }
 juce::AudioProcessorValueTreeState::ParameterLayout
@@ -303,18 +303,17 @@ juce::AudioProcessorEditor* StutterZenAudioProcessor::createEditor()
 void StutterZenAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     
-    auto state = treeState.copyState();
-    std::unique_ptr<juce::XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, destData);
+    juce::MemoryOutputStream mos(destData, true);
+    treeState.state.writeToStream(mos);
 }
 
 void StutterZenAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-     
-            if (xmlState.get() != nullptr)
-                if (xmlState->hasTagName (treeState.state.getType()))
-                    treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
+    auto tree = juce::ValueTree::readFromData(data, sizeInBytes);
+    if (tree.isValid())
+    {
+        treeState.replaceState(tree);
+    }
 }
 
 //==============================================================================
