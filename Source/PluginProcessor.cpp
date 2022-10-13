@@ -66,7 +66,7 @@ StutterZenAudioProcessor::createParameterLayout()
     auto pThresholdL = (std::make_unique<juce::AudioParameterFloat>("thresholdL",
                                                           "ThresholdL",0,120.f,0.75f));
     auto pDelayL = (std::make_unique<juce::AudioParameterFloat>("delayL",
-                                                          "DelayL",0,1.f,0.5f));
+                                                          "DelayL",0.01,1.f,0.5f));
     auto pDelayWetL = (std::make_unique<juce::AudioParameterFloat>("delaywetL",
                                                           "DelaywetL",0,1.f,0.5f));
     auto pOutGainL = (std::make_unique<juce::AudioParameterFloat>("gainL",
@@ -76,7 +76,7 @@ StutterZenAudioProcessor::createParameterLayout()
     auto pThresholdR = (std::make_unique<juce::AudioParameterFloat>("thresholdR",
                                                           "ThresholdR",0,120.f,0.75f));
     auto pDelayR = (std::make_unique<juce::AudioParameterFloat>("delayR",
-                                                          "DelayR",0,1.f,0.5f));
+                                                          "DelayR",0.01,1.f,0.5f));
     auto pDelayWetR = (std::make_unique<juce::AudioParameterFloat>("delaywetR",
                                                           "DelaywetR",0,1.f,0.5f));
     auto pOutGainR = (std::make_unique<juce::AudioParameterFloat>("gainR",
@@ -109,7 +109,7 @@ void StutterZenAudioProcessor::parameterChanged(const juce::String &paramterID, 
     {
         audioEngine.updateThresL(newValue);
     } else if (paramterID == "delayL")
-    {
+    { 
         audioEngine.updateDelayL(newValue);
     } else if (paramterID == "delaywetL")
     {

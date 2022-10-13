@@ -11,15 +11,14 @@
 #include "JuceHeader.h"
 #include "DelayLine.h"
 #pragma once
-template <typename Type, size_t maxNumChannels = 2>
+template <typename Type, size_t maxNumChannels = 1>
 class Delay
 {
 public:
     //==============================================================================
     Delay()
     {
-        setMaxDelayTime (5.0f);
-        setDelayTime (0, 0.7f);
+        setMaxDelayTime (2.f);
         setWetLevel (1.0f);
         setFeedback (0.00f);
     }
@@ -29,24 +28,26 @@ public:
     {
         jassert (spec.numChannels <= maxNumChannels);
                 sampleRate = (Type) spec.sampleRate;
-                updateDelayLineSize();
-                updateDelayTime();
                 
-                
-                ampSmooth.reset(sampleRate,0.00001f);
+        ampSmooth.reset(sampleRate,0.00001f);
+        delaySmooth1.reset(sampleRate,0.0000001f);
+        delaySmooth2.reset(sampleRate,0.0000001f);
+        delaySmooth3.reset(sampleRate,0.0000001f);
+        delaySmooth4.reset(sampleRate,0.0000001f);
     }
 
     //==============================================================================
     void reset() noexcept
     {
-       
-        for (auto& dline : delayLines)
-            dline.clear();
+        delayLine1[0].clear();
+        delayLine2[0].clear();
+        delayLine3[0].clear();
+        delayLine4[0].clear();
     }
     //==============================================================================
     size_t getNumChannels() const noexcept
     {
-        return delayLines.size();
+        return delayLine1.size();
     }
 
     //==============================================================================
@@ -54,7 +55,10 @@ public:
     {
         jassert (newValue > Type (0));
         maxDelayTime = newValue;
-        updateDelayLineSize();
+        delayLine1[0].resize (maxDelayTime * sampleRate);
+        delayLine2[0].resize (maxDelayTime * sampleRate);
+        delayLine3[0].resize (maxDelayTime * sampleRate);
+        delayLine4[0].resize (maxDelayTime * sampleRate);
     }
 
     //==============================================================================
@@ -81,9 +85,8 @@ public:
         }
 
         jassert (newValue >= Type (0));
-        delayTimes[channel] = newValue;
+        delayTime = newValue;
 
-        updateDelayTime();
     }
     void setAmount (Type newValue)
     {
@@ -111,15 +114,24 @@ public:
         {
             auto* input  = inputBlock .getChannelPointer (ch);
             auto* output = outputBlock.getChannelPointer (ch);
-            auto& dline = delayLines[ch];
-            auto delayTime = delayTimesSample[ch];
+            
             
             for (size_t i = 0; i < numSamples; ++i)
                    {
-                       auto delayedSample = (dline.get (delayTime));
+                       delaySmooth1.setTargetValue((0.1 +delayTime) * sampleRate);
+                       delaySmooth2.setTargetValue((0.2 +delayTime) * sampleRate);
+                       delaySmooth3.setTargetValue((0.3 +delayTime) * sampleRate);
+                       delaySmooth4.setTargetValue((0.4 +delayTime) * sampleRate);
+                       auto delayedSample1 = (delayLine1[0].get(delaySmooth1.getNextValue()));
+                       auto delayedSample2 = (delayLine2[0].get (delaySmooth2.getNextValue()));
+                       auto delayedSample3 = (delayLine3[0].get (delaySmooth3.getNextValue()));
+                       auto delayedSample4 = (delayLine4[0].get (delaySmooth4.getNextValue()));
                        auto inputSample = input[i];
-                       dline.push (inputSample);
-                       auto outputSample =  (delayedSample * ampSmooth.getNextValue()) + (ampSmooth.getNextValue() -1.f) * inputSample;
+                       delayLine1[0].push (inputSample);
+                       delayLine2[0].push (inputSample);
+                       delayLine3[0].push (inputSample);
+                       delayLine4[0].push (inputSample);
+                       auto outputSample =  (delayedSample1 + delayedSample2 + delayedSample3 + delayedSample4) * ampSmooth.getNextValue() + (ampSmooth.getNextValue() -1.f) * inputSample;
                        
                        output[i] = outputSample;
                       
@@ -129,33 +141,29 @@ public:
 
 private:
     //==============================================================================
-    juce::LinearSmoothedValue<Type> ampSmooth {0.0f};
-    std::array<DelayLine<Type>, maxNumChannels> delayLines;
+    juce::SmoothedValue<Type, juce::ValueSmoothingTypes::Linear>  ampSmooth {0.0f};
+    juce::SmoothedValue<Type, juce::ValueSmoothingTypes::Linear> delaySmooth1 {0.0f};
+    juce::SmoothedValue<Type, juce::ValueSmoothingTypes::Linear> delaySmooth2 {0.0f};
+    juce::SmoothedValue<Type, juce::ValueSmoothingTypes::Linear> delaySmooth3 {0.0f};
+    juce::SmoothedValue<Type, juce::ValueSmoothingTypes::Linear> delaySmooth4 {0.0f};
+    std::array<DelayLine<Type>, maxNumChannels> delayLine1;
+    std::array<DelayLine<Type>, maxNumChannels> delayLine2;
+    std::array<DelayLine<Type>, maxNumChannels> delayLine3;
+    std::array<DelayLine<Type>, maxNumChannels> delayLine4;
     std::array<size_t, maxNumChannels> delayTimesSample;
     std::array<Type, maxNumChannels> delayTimes;
     Type feedback { Type (0) };
     Type wetLevel { Type (0) };
     Type time { Type (0) };
     Type amount {Type (0)};
-
+    Type delayTime {Type (0)};
     Type sampleRate   { Type (44.1e3) };
     Type maxDelayTime { Type (2) };
+    Type delayTime1 { Type (2) };
+    Type delayTime2 { Type (2) };
+    Type delayTime3 { Type (2) };
+    Type delayTime4 { Type (2) };
     //==============================================================================
-    void updateDelayLineSize()
-    {
-        auto delayLineSizeSamples = (size_t) std::ceil (maxDelayTime * sampleRate);
-         
-                for (auto& dline : delayLines)
-                    dline.resize (delayLineSizeSamples);    // [2]
-    }
-
-    //==============================================================================
-    void updateDelayTime() noexcept
-    {
-        for (size_t ch = 0; ch < maxNumChannels; ++ch)
-            delayTimesSample[ch] = (size_t) juce::roundToInt (delayTimes[ch] * sampleRate);
-        
-    }
-    
    
+    //==============================================================================
 };

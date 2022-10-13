@@ -39,6 +39,7 @@ public:
        
         auto blockL = block.getSingleChannelBlock(0);
         auto blockR = block.getSingleChannelBlock(1);
+    
         juce::dsp::ProcessContextReplacing<float> contextL (blockL);
         fxChainL.process(contextL);
         juce::dsp::ProcessContextReplacing<float> contextR(blockR);
