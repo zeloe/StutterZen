@@ -38,8 +38,10 @@ audioVisualizer2(2)
     treeState.addParameterListener("delayR", this);
     treeState.addParameterListener("delaywetR", this);
     treeState.addParameterListener("gainR", this);
+    treeState.addParameterListener("wetDelay", this);
+    treeState.addParameterListener("wetChorus", this);
   //  treeState.addParameterListener("mode", this);
-    
+   
 }
 
 StutterZenAudioProcessor::~StutterZenAudioProcessor()
@@ -54,6 +56,8 @@ StutterZenAudioProcessor::~StutterZenAudioProcessor()
     treeState.removeParameterListener("delayR", this);
     treeState.removeParameterListener("delaywetR", this);
     treeState.removeParameterListener("gainR", this);
+    treeState.removeParameterListener("wetDelay", this);
+    treeState.removeParameterListener("wetChorus", this);
   //  treeState.removeParameterListener("mode", this);
    
 }
@@ -65,37 +69,38 @@ StutterZenAudioProcessor::createParameterLayout()
                                                           "ReductionL",0.00f,60.f,0.75f));
     auto pThresholdL = (std::make_unique<juce::AudioParameterFloat>("thresholdL",
                                                           "ThresholdL",0,120.f,0.75f));
-    auto pDelayL = (std::make_unique<juce::AudioParameterFloat>("delayL",
-                                                          "DelayL",0.01,1.f,0.5f));
-    auto pDelayWetL = (std::make_unique<juce::AudioParameterFloat>("delaywetL",
-                                                          "DelaywetL",0,1.f,0.5f));
     auto pOutGainL = (std::make_unique<juce::AudioParameterFloat>("gainL",
                                                           "OutGainL",0,5.f,0.5f));
     auto pDeltaR = (std::make_unique<juce::AudioParameterFloat>("deltaR",
                                                           "ReductionR",0.00f,60.f,0.75f));
     auto pThresholdR = (std::make_unique<juce::AudioParameterFloat>("thresholdR",
                                                           "ThresholdR",0,120.f,0.75f));
-    auto pDelayR = (std::make_unique<juce::AudioParameterFloat>("delayR",
-                                                          "DelayR",0.01,1.f,0.5f));
-    auto pDelayWetR = (std::make_unique<juce::AudioParameterFloat>("delaywetR",
-                                                          "DelaywetR",0,1.f,0.5f));
     auto pOutGainR = (std::make_unique<juce::AudioParameterFloat>("gainR",
                                                           "OutGainR",0,5.f,0.5f));
     
     auto pMode = (std::make_unique<juce::AudioParameterBool>("mode",
                                                             "Mode",false));
     
+    auto pDelayScaleSpeed = (std::make_unique<juce::AudioParameterFloat>("speedDelay",
+                                                "SpeedDelay",.25f,1.2f,.5f));
+    auto pChorusScaleSpeed = (std::make_unique<juce::AudioParameterFloat>("speedChorus",
+                                                "SpeedChorus",.25f,1.2f,.5f));
+    auto pDelaywet = (std::make_unique<juce::AudioParameterFloat>("wetDelay",
+                                                "SpeedDelay",0.f,1.f,.5f));
+    auto pChoruswet = (std::make_unique<juce::AudioParameterFloat>("wetChorus",
+                                                "SpeedChorus",0.f,1.f,.25f));
+   
     params.push_back(std::move(pDeltaL));
     params.push_back(std::move(pThresholdL));
-    params.push_back(std::move(pDelayL));
-    params.push_back(std::move(pDelayWetL));
     params.push_back(std::move(pOutGainL));
     params.push_back(std::move(pDeltaR));
     params.push_back(std::move(pThresholdR));
-    params.push_back(std::move(pDelayR));
-    params.push_back(std::move(pDelayWetR));
     params.push_back(std::move(pOutGainR));
     params.push_back(std::move(pMode));
+    params.push_back(std::move(pDelayScaleSpeed));
+    params.push_back(std::move(pChorusScaleSpeed));
+    params.push_back(std::move(pDelaywet));
+    params.push_back(std::move(pChoruswet));
     
     return {params.begin(),params.end()};
 }
@@ -105,34 +110,34 @@ void StutterZenAudioProcessor::parameterChanged(const juce::String &paramterID, 
     if (paramterID == "deltaL")
     {
         audioEngine.updateDeltaL(newValue);
-    } else if (paramterID == "thresholdL")
+    }
+    if (paramterID == "thresholdL")
     {
         audioEngine.updateThresL(newValue);
-    } else if (paramterID == "delayL")
-    { 
-        audioEngine.updateDelayL(newValue);
-    } else if (paramterID == "delaywetL")
-    {
-        audioEngine.updateDelayWetL(newValue);
-    }  else if (paramterID == "gainL")
+    }
+    if (paramterID == "gainL")
     {
         audioEngine.updateOutputGainL(newValue);
     }
     if (paramterID == "deltaR")
     {
         audioEngine.updateDeltaR(newValue);
-    } else if (paramterID == "thresholdR")
+    }
+    if (paramterID == "thresholdR")
     {
         audioEngine.updateThresR(newValue);
-    } else if (paramterID == "delayR")
-    {
-        audioEngine.updateDelayR(newValue);
-    } else if (paramterID == "delaywetR")
-    {
-        audioEngine.updateDelayWetR(newValue);
-    }  else if (paramterID == "gainR")
+    }
+    if (paramterID == "gainR")
     {
         audioEngine.updateOutputGainR(newValue);
+    }
+    if(paramterID == "wetDelay")
+    {
+        audioEngine.updateWetDelay(newValue);
+    }
+    if(paramterID == "wetChorus")
+    {
+        audioEngine.updateWetChorus(newValue);
     }
   
   
@@ -143,14 +148,12 @@ void StutterZenAudioProcessor::updateParameters()
 {
     audioEngine.updateThresL(treeState.getRawParameterValue("thresholdL")->load());
     audioEngine.updateDeltaL(treeState.getRawParameterValue("deltaL")->load());
-    audioEngine.updateDelayL(treeState.getRawParameterValue("delayL")->load());
-    audioEngine.updateDelayWetL(treeState.getRawParameterValue("delaywetL")->load());
     audioEngine.updateOutputGainL(treeState.getRawParameterValue("gainL")->load());
     audioEngine.updateThresR(treeState.getRawParameterValue("thresholdR")->load());
     audioEngine.updateDeltaR(treeState.getRawParameterValue("deltaR")->load());
-    audioEngine.updateDelayR(treeState.getRawParameterValue("delayR")->load());
-    audioEngine.updateDelayWetR(treeState.getRawParameterValue("delaywetR")->load());
     audioEngine.updateOutputGainR(treeState.getRawParameterValue("gainR")->load());
+    audioEngine.updateWetDelay(treeState.getRawParameterValue("wetDelay")->load());
+    audioEngine.updateWetChorus(treeState.getRawParameterValue("wetChorus")->load());
     audioVisualizer.updateLineL(treeState.getRawParameterValue("thresholdL")->load());
     audioVisualizer.updateLineR(treeState.getRawParameterValue("thresholdR")->load());
 }

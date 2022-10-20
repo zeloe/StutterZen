@@ -12,6 +12,7 @@
 #include "AudioEngine.h"
 #include "WaveFormViewer.h"
 #include "WaveFormViewer2.h"
+#include "C_AudioParamter.h"
 //==============================================================================
 /**
 */
@@ -58,12 +59,13 @@ public:
     juce::AudioProcessorValueTreeState treeState;
     WaveFromViewer audioVisualizer;
     WaveFromViewer_2 audioVisualizer2;
+    AudioEngine audioEngine;
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void parameterChanged(const juce::String& parameterID, float newValue) override;
     void updateParameters ();
     
-    AudioEngine audioEngine;
+  
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StutterZenAudioProcessor)
 };
