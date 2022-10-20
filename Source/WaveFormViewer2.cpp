@@ -168,6 +168,7 @@ void WaveFromViewer_2::paint (juce::Graphics& g)
 
     for (auto* c : channels)
     {
+        
         if(counter == 0)
         {
             g.setColour(juce::Colours::red);
@@ -191,6 +192,7 @@ void WaveFromViewer_2::getChannelAsPath (juce::Path& path, const juce::Range<flo
 
     for (int i = 0; i < numLevels; ++i)
     {
+        
         auto level = -(levels[(nextSample + i) % numLevels].getEnd());
 
         if (i == 0)

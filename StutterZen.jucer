@@ -4,8 +4,20 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               pluginManufacturer="CodeZen" pluginFormats="buildVST3">
   <MAINGROUP id="H1unA9" name="StutterZen">
-    <GROUP id="{F6CDBD2C-13F7-BAD4-45F1-FC4F81126BAB}" name="DSP">
-      <GROUP id="{DE0D069A-4E43-ADB5-5530-65B32E25F618}" name="GUI">
+    <GROUP id="{E70FEA25-9FCC-DB7C-C18D-211BDCF51DAF}" name="AudioParameters">
+      <FILE id="RKxU3m" name="ValueTreeC.h" compile="0" resource="0" file="Source/ValueTreeC.h"/>
+    </GROUP>
+    <GROUP id="{DE0D069A-4E43-ADB5-5530-65B32E25F618}" name="GUI">
+      <FILE id="NjQOo1" name="GuiDefines.h" compile="0" resource="0" file="Source/GuiDefines.h"/>
+      <GROUP id="{CFE6B628-DAC8-D62F-CCE5-284837633BF3}" name="Knobs">
+        <FILE id="ceC73p" name="Zen_Knob.cpp" compile="1" resource="0" file="Source/Zen_Knob.cpp"/>
+        <FILE id="iAFJIK" name="Zen_Knob.h" compile="0" resource="0" file="Source/Zen_Knob.h"/>
+        <FILE id="u1nnmM" name="Zen_LookAndFeel.cpp" compile="1" resource="0"
+              file="Source/Zen_LookAndFeel.cpp"/>
+        <FILE id="qL6BHS" name="Zen_LookAndFeel.h" compile="0" resource="0"
+              file="Source/Zen_LookAndFeel.h"/>
+      </GROUP>
+      <GROUP id="{C32D33EB-F618-EA95-7EA0-3C8AB07FAFF8}" name="WaveFromViewer">
         <FILE id="s1k2Dz" name="WaveFormViewer2.cpp" compile="1" resource="0"
               file="Source/WaveFormViewer2.cpp"/>
         <FILE id="gCKE7k" name="WaveFormViewer2.h" compile="0" resource="0"
@@ -14,18 +26,28 @@
               file="Source/WaveFormViewer.cpp"/>
         <FILE id="XGaiKz" name="WaveFormViewer.h" compile="0" resource="0"
               file="Source/WaveFormViewer.h"/>
-        <FILE id="ceC73p" name="Zen_Knob.cpp" compile="1" resource="0" file="Source/Zen_Knob.cpp"/>
-        <FILE id="iAFJIK" name="Zen_Knob.h" compile="0" resource="0" file="Source/Zen_Knob.h"/>
-        <FILE id="u1nnmM" name="Zen_LookAndFeel.cpp" compile="1" resource="0"
-              file="Source/Zen_LookAndFeel.cpp"/>
-        <FILE id="qL6BHS" name="Zen_LookAndFeel.h" compile="0" resource="0"
-              file="Source/Zen_LookAndFeel.h"/>
       </GROUP>
+      <GROUP id="{43B16325-8562-CA60-B623-4F00A56EB933}" name="DelayView">
+        <FILE id="VfQeLs" name="DelayView.cpp" compile="1" resource="0" file="Source/DelayView.cpp"/>
+        <FILE id="bV8LVj" name="DelayView.h" compile="0" resource="0" file="Source/DelayView.h"/>
+        <FILE id="FXcy15" name="Points.h" compile="0" resource="0" file="Source/Points.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{F6CDBD2C-13F7-BAD4-45F1-FC4F81126BAB}" name="DSP">
       <FILE id="sLpdr5" name="AudioEngine.h" compile="0" resource="0" file="Source/AudioEngine.h"/>
-      <FILE id="FIBjKt" name="Gate_L.h" compile="0" resource="0" file="Source/Gate_L.h"/>
-      <FILE id="CtFvvt" name="PreDelays.h" compile="0" resource="0" file="Source/PreDelays.h"/>
-      <FILE id="jSvb3u" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
-      <FILE id="tpEgqZ" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
+      <GROUP id="{F213D659-D04B-B4AB-1219-C2B323409FBC}" name="Chorus">
+        <FILE id="r8KjXl" name="WaveTable.h" compile="0" resource="0" file="Source/WaveTable.h"/>
+        <FILE id="jCpOUG" name="Chorus.h" compile="0" resource="0" file="Source/Chorus.h"/>
+        <FILE id="NlD8Um" name="ChorusProcess.h" compile="0" resource="0" file="Source/ChorusProcess.h"/>
+      </GROUP>
+      <GROUP id="{A989C0B4-A845-DFB6-4395-C7025AC49DC1}" name="Delays">
+        <FILE id="CtFvvt" name="PreDelays.h" compile="0" resource="0" file="Source/PreDelays.h"/>
+        <FILE id="jSvb3u" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
+        <FILE id="tpEgqZ" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
+      </GROUP>
+      <GROUP id="{690EB6E4-C2ED-6FD7-2FD8-6F0DFE75C9B4}" name="Gate">
+        <FILE id="FIBjKt" name="Gate_L.h" compile="0" resource="0" file="Source/Gate_L.h"/>
+      </GROUP>
     </GROUP>
     <GROUP id="{62C7AEC9-80DC-7D2D-D2C3-070782F36432}" name="Source">
       <FILE id="VwKwYI" name="PluginProcessor.cpp" compile="1" resource="0"
