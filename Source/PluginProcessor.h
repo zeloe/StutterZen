@@ -12,7 +12,6 @@
 #include "AudioEngine.h"
 #include "WaveFormViewer.h"
 #include "WaveFormViewer2.h"
-#include "C_AudioParamter.h"
 //==============================================================================
 /**
 */
