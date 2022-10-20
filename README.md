@@ -1,2 +1,2 @@
 # StutterZen
-Gate for percussive extraction
+Gate for percussive extraction and modulation
